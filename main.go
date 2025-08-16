@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-//go:embed frontend/dist/index.html frontend/dist/assets/* frontend/dist/*
+//go:embed frontend/dist
 var siteContent embed.FS
 
 func main() {
@@ -28,7 +28,6 @@ func main() {
 			http.NotFound(w, r)
 			return
 		}
-
 		switch ext := strings.ToLower(filepath.Ext(fsPath)); ext {
 		case ".html":
 			w.Header().Set("Content-Type", "text/html")
