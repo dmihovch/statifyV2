@@ -1,13 +1,15 @@
 <script lang="ts">
-  import Router, { link, navigate } from "svelte-spa-router";
+  import Router, { link } from "svelte-spa-router";
   import Home from "./routes/Home.svelte"
   import Artists from "./routes/Artists.svelte"
-  
+  import Login from "./routes/Login.svelte"
+
   const routes = {
     "/": Home,
-    "/artists": Artists
+    "/artists": Artists,
+    "/login": Login
   };
-  
+
   console.log("App.svelte loaded");
 </script>
 

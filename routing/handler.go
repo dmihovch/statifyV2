@@ -18,7 +18,6 @@ func FSHandler(fileSystem fs.FS) http.HandlerFunc {
 
 		data, err := fs.ReadFile(fileSystem, fileSystemPath)
 		if err != nil {
-
 			if urlPath == "/index.html" {
 				http.NotFound(w, r)
 				return
@@ -50,6 +49,5 @@ func FSHandler(fileSystem fs.FS) http.HandlerFunc {
 		}
 
 		w.Write(data)
-
 	}
 }
