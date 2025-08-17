@@ -2,49 +2,21 @@ package main
 
 import (
 	"embed"
+	"io/fs"
 	"log"
 	"net/http"
-	"path"
-	"path/filepath"
-	"strings"
+	"statify/routing"
 )
 
-//go:embed frontend/dist
-var siteContent embed.FS
+//go:embed frontend/dist/**
+var siteFileSystem embed.FS
 
 func main() {
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
-		urlPath := r.URL.Path
-		if urlPath == "/" {
-			urlPath = "/index.html"
-		}
-
-		fsPath := path.Join("frontend/dist", urlPath)
-
-		data, err := siteContent.ReadFile(fsPath)
-		if err != nil {
-			http.NotFound(w, r)
-			return
-		}
-		switch ext := strings.ToLower(filepath.Ext(fsPath)); ext {
-		case ".html":
-			w.Header().Set("Content-Type", "text/html")
-		case ".js":
-			w.Header().Set("Content-Type", "application/javascript")
-		case ".css":
-			w.Header().Set("Content-Type", "text/css")
-		case ".svg":
-			w.Header().Set("Content-Type", "image/svg+xml")
-		case ".png":
-			w.Header().Set("Content-Type", "image/png")
-		default:
-			w.Header().Set("Content-Type", "application/octet-stream")
-		}
-
-		w.Write(data)
-	})
+	distFS, err := fs.Sub(siteFileSystem, "frontend/dist")
+	if err != nil {
+		panic(err)
+	}
+	http.HandleFunc("/", routing.FSHandler(distFS))
 
 	log.Println("Server running at http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
