@@ -83,6 +83,7 @@ func (s *Server) createTables() {
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 	);`
 
+	//this needs to be changed
 	createStatsTable := `
 	CREATE TABLE IF NOT EXISTS user_stats (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
